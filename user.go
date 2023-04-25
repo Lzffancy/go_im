@@ -101,8 +101,21 @@ func (this *User) DoMessage(msg string) {
 			this.SendMsg("[im_server] "+"name changed,your name: "+newName+"\n", this)
 
 		}
-	}
+		//sendto:username:msg
+	} else if strings.HasPrefix(msg, "sendto|") {
+		remoteName := strings.Split(msg, "|")[1]
+		remoteMsg := strings.Split(msg, "|")[2]
+		if remoteName == "" || remoteMsg == "" {
+			this.SendMsg("[im_server] command is not right, sendto:username:yourmassage exp: sendto|xxx|hello\n", this)
+		}
 
+		remoteUser, ok := this.server.OnlineMap[remoteName]
+		if !ok {
+			this.SendMsg("[im_server] user not find,please check!\n", this)
+		} else {
+			this.SendMsg("[Private messages:"+this.Name+"] "+remoteMsg, remoteUser)
+		}
+	}
 }
 
 func (this *User) ListenMessage() {

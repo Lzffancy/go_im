@@ -77,8 +77,7 @@ func (this *Server) Handler(conn net.Conn) {
 	for {
 		select {
 		case <-isLive:
-			fmt.Println("alive")
-		case <-time.After(time.Second * 10):
+		case <-time.After(time.Second * 600):
 			log.Printf(user.Name + " timeout, force offline")
 			offlineMsg := "[im_server] your are leave room too long.. offline.\n"
 			user.SendMsg(offlineMsg, user)
