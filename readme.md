@@ -23,10 +23,15 @@ nc 127.0.0.1 8888
 进入界面
 
 off: offline your client #关闭
+
 who: list all client #在线用户
+
 all: send a broadcast message. exp all:hello ==> send 'hello' #给所有人发消息
+
 rename: change your name.exp rename:xxx ===> your name is xxx #修改自己昵称
+
 sendto| send message to someone. exp sendto|username|msg #给某人发消息
+
 
 ### 5.体验地址
 nc 106.52.49.30 8887
