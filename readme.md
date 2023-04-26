@@ -1,13 +1,13 @@
-Instant messaging server ¼´Ê±Í¨Ñ¶·şÎñÆ÷
-»ùÓÚgo channelÉè¼Æ,Ê¹ÓÃtcpÁ¬½Ó
+Instant messaging server å³æ—¶é€šè®¯æœåŠ¡å™¨
+åŸºäºgo channelè®¾è®¡,ä½¿ç”¨tcpè¿æ¥
 
-²¿Êğ
-ĞŞ¸Ämain.go ÖĞµÄipºÍport
-1.±àÒë
+éƒ¨ç½²
+ä¿®æ”¹main.go ä¸­çš„ipå’Œport
+1.ç¼–è¯‘
 go build -o im_server user.go main.go server.go
-2.ºóÌ¨ÔËĞĞ
+2.åå°è¿è¡Œ
 nohup ./im_server > im_server_out.log 2>&1 &
-3.¼ì²éÈÕÖ¾ 
+3.æ£€æŸ¥æ—¥å¿— 
 cat im_server.log
 [im_server]2023/04/26 15:47:15.105781 main.go:27: -----imserver start run in pid:9843-----
 [im_server]2023/04/26 15:47:15.105787 server.go:94: -----imserver run in pid:9843 ok-----
@@ -15,17 +15,17 @@ cat im_server.log
 ps -ef |grep "im_server"
 root     26186  6451  0 16:33 pts/0    00:00:00 ./im_server
 
-4.¿Í»§¶ËÊ¹ÓÃncÃüÁî
+4.å®¢æˆ·ç«¯ä½¿ç”¨ncå‘½ä»¤
 nc 127.0.0.1 8888
-½øÈë½çÃæ
+è¿›å…¥ç•Œé¢
 =============Welcome to chat room============
-off: offline your client #¹Ø±Õ
-who: list all client #ÔÚÏßÓÃ»§
-all: send a broadcast message. exp all:hello ==> send 'hello' #¸øËùÓĞÈË·¢ÏûÏ¢
-rename: change your name.exp rename:xxx ===> your name is xxx #ĞŞ¸Ä×Ô¼ºêÇ³Æ
-sendto| send message to someone. exp sendto|username|msg #¸øÄ³ÈË·¢ÏûÏ¢
+off: offline your client #å…³é—­
+who: list all client #åœ¨çº¿ç”¨æˆ·
+all: send a broadcast message. exp all:hello ==> send 'hello' #ç»™æ‰€æœ‰äººå‘æ¶ˆæ¯
+rename: change your name.exp rename:xxx ===> your name is xxx #ä¿®æ”¹è‡ªå·±æ˜µç§°
+sendto| send message to someone. exp sendto|username|msg #ç»™æŸäººå‘æ¶ˆæ¯
 ===========================================
-![img.png](img.png)
-5.ÌåÑéµØÖ·
+
+5.ä½“éªŒåœ°å€
 
 nc 106.52.49.30 8887
