@@ -25,6 +25,6 @@ func init() {
 func main() {
 	pid := os.Getpid()
 	log.Printf("-----imserver start run in pid:%d-----", pid)
-	server := NewServer("127.0.0.1", 8888)
+	server := NewServer("127.0.0.2", 8888)
 	server.Start()
 }

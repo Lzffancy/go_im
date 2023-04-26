@@ -23,7 +23,7 @@ func NewUser(conn net.Conn, server *Server) *User {
 		Addr:   userAddr,
 		C:      make(chan string),
 		conn:   conn,
-		server: server} //传入server势力
+		server: server} //传入servers实例
 
 	go user.ListenMessage()
 
@@ -36,12 +36,13 @@ func (this *User) Online() {
 	this.server.OnlineMap[this.Name] = this
 	this.server.mapLock.Unlock()
 	//
-	this.server.BroadCast(this, "online now")
+	this.server.BroadCast(this, "online now\n")
 	helpList := "=============Welcome to chat room============\n" +
 		"off: offline your client\n" +
 		"who: list all client\n" +
 		"all: send a broadcast message. exp all:hello ==> send 'hello'\n" +
 		"rename: change your name.exp rename:xxx ===> your name is xxx\n" +
+		"sendto| send message to someone. exp sendto|username|msg\n" +
 		"===========================================\n"
 	this.SendMsg(helpList, this)
 
@@ -51,7 +52,7 @@ func (this *User) Offline() {
 	delete(this.server.OnlineMap, this.Name)
 	this.server.mapLock.Unlock()
 	//
-	this.server.BroadCast(this, "Offline now")
+	this.server.BroadCast(this, "Offline now\n")
 	err := this.conn.Close()
 	if err != nil {
 		defer this.conn.Close()
@@ -80,11 +81,12 @@ func (this *User) DoMessage(msg string) {
 		helpList := "off: offline your client\n" +
 			"who: list all client\n" +
 			"all: send a broadcast message. exp all:hello ==> send 'hello'\n" +
-			"rename: change your name.exp rename:xxx ===> your name is xxx\n"
+			"rename: change your name.exp rename:xxx ===> your name is xxx\n" +
+			"sendto| send message to someone. exp sendto|username|msg\n"
 		this.SendMsg(helpList, this)
 	} else if strings.HasPrefix(msg, "all:") {
 		// 广播消息
-		this.server.BroadCast(this, msg[4:])
+		this.server.BroadCast(this, msg[4:]+"\n")
 	} else if strings.HasPrefix(msg, "rename:") {
 		// 修改用户名
 		newName := msg[7:]
@@ -113,15 +115,16 @@ func (this *User) DoMessage(msg string) {
 		if !ok {
 			this.SendMsg("[im_server] user not find,please check!\n", this)
 		} else {
-			this.SendMsg("[Private messages:"+this.Name+"] "+remoteMsg, remoteUser)
+			this.SendMsg("[private messages:"+this.Name+"] "+remoteMsg+"\n", remoteUser)
 		}
 	}
 }
 
+//用户的消息chan
 func (this *User) ListenMessage() {
 	for {
 		msg := <-this.C
-		_, err := this.conn.Write([]byte(msg + "\n"))
+		_, err := this.conn.Write([]byte(msg))
 		if err != nil {
 			fmt.Println("send massage err:" + this.Name)
 			return
@@ -132,6 +135,6 @@ func (this *User) ListenMessage() {
 }
 
 func (this *User) SendMsg(msg string, toUser *User) {
-
-	toUser.conn.Write([]byte(msg))
+	toUser.C <- msg
+	//toUser.conn.Write([]byte(msg))
 }

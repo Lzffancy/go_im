@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -64,7 +65,8 @@ func (this *Server) Handler(conn net.Conn) {
 		for {
 			n, err := conn.Read(buf)
 			if err != nil && err != io.EOF {
-				fmt.Println("socket read err", err)
+				fmt.Println(user.Addr, " socket read err\n", err)
+				user.Offline()
 				return
 			}
 			//msg 处理消息
@@ -91,7 +93,8 @@ func (this *Server) Handler(conn net.Conn) {
 func (this *Server) Start() {
 	pid := os.Getpid()
 	log.Printf("-----imserver run in pid:%d ok-----", pid)
-	listener, err := net.Listen("tcp", "127.0.0.1:8888")
+	ipPort := this.Ip + ":" + strconv.Itoa(this.Port)
+	listener, err := net.Listen("tcp", ipPort)
 	if err != nil {
 		fmt.Println("net.Listen err", err)
 		return
